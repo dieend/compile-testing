@@ -260,19 +260,19 @@ public class JavaSourcesSubjectFactoryTest {
 
     @Override
     public synchronized void init(ProcessingEnvironment processingEnv) {
-      try {
-        JavaFileObject sourceFile = processingEnv.getFiler().createSourceFile(GENERATED_CLASS_NAME);
-        Writer writer = sourceFile.openWriter();
-        writer.write(GENERATED_SOURCE);
-        writer.close();
-      } catch (IOException e) {
-        throw new RuntimeException(e);
-      }
+    	try {
+            JavaFileObject sourceFile = processingEnv.getFiler().createSourceFile(GENERATED_CLASS_NAME);
+            Writer writer = sourceFile.openWriter();
+            writer.write(GENERATED_SOURCE);
+            writer.close();
+          } catch (IOException e) {
+            throw new RuntimeException(e);
+          }
     }
 
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
-      return false;
+      return true;
     }
 
     @Override
@@ -341,4 +341,7 @@ public class JavaSourcesSubjectFactoryTest {
       return SourceVersion.latestSupported();
     }
   }
+  public @interface CompileTest {
+  }
+
 }

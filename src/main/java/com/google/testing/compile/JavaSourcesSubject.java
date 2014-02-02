@@ -99,6 +99,17 @@ public final class JavaSourcesSubject
       }
       return new SuccessfulCompilationBuilder(result);
     }
+    public SuccessfulCompilationClause compilesWithoutError(Iterable<String> compilerOptions) {
+        Compilation.Result result = Compilation.compile(processors, getSubject(), compilerOptions);
+        if (!result.successful()) {
+          ImmutableList<Diagnostic<? extends JavaFileObject>> errors =
+              result.diagnosticsByKind().get(Kind.ERROR);
+          StringBuilder message = new StringBuilder("Compilation produced the following errors:\n");
+          Joiner.on('\n').appendTo(message, errors);
+          failureStrategy.fail(message.toString());
+        }
+        return new SuccessfulCompilationBuilder(result);
+      }
 
     public UnsuccessfulCompilationClause failsToCompile() {
       Result result = Compilation.compile(processors, getSubject());

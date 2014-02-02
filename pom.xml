@@ -9,7 +9,7 @@
 
   <groupId>com.google.testing.compile</groupId>
   <artifactId>compile-testing</artifactId>
-  <version>0.5-SNAPSHOT</version>
+  <version>DIEEND-0.5-SNAPSHOT</version>
 
   <name>Compile Testing</name>
   <description>Utilities for testing compilation.</description>
@@ -96,11 +96,11 @@
       <activation>
         <activeByDefault>true</activeByDefault>
         <file>
-          <exists>${java.home}/../lib/tools.jar</exists>
+          <exists>${env.JAVA_HOME_6}/lib/tools.jar</exists>
         </file>
       </activation>
       <properties>
-        <toolsjar>${java.home}/../lib/tools.jar</toolsjar>
+        <toolsjar>${env.JAVA_HOME_6}/lib/tools.jar</toolsjar>
       </properties>
     </profile>
     <profile>

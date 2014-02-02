@@ -16,7 +16,10 @@
 package test;
 
 public class HelloWorld {
+	@CompileTest
   public static void main(String[] args) {
     System.out.println("Hello World!");
   }
+	public @interface CompileTest {
+	  }
 }

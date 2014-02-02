@@ -46,15 +46,15 @@ import javax.tools.ToolProvider;
  *
  * @author Gregory Kick
  */
-final class Compilation {
-  private Compilation() {}
+public final class Compilation {
+  public Compilation() {}
 
   /**
    * Compile {@code sources} using {@code processors}.
    *
    * @throws RuntimeException if compilation fails.
    */
-  static Result compile(Iterable<? extends Processor> processors,
+  public static Result compile(Iterable<? extends Processor> processors,
       Iterable<? extends JavaFileObject> sources) {
     JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
     DiagnosticCollector<JavaFileObject> diagnosticCollector =
@@ -73,6 +73,25 @@ final class Compilation {
     return new Result(successful, diagnosticCollector.getDiagnostics(),
         fileManager.getOutputFiles());
   }
+  public static Result compile(Iterable<? extends Processor> processors,
+	      Iterable<? extends JavaFileObject> sources, Iterable<String> options) {
+	    JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+	    DiagnosticCollector<JavaFileObject> diagnosticCollector =
+	        new DiagnosticCollector<JavaFileObject>();
+	    InMemoryJavaFileManager fileManager = new InMemoryJavaFileManager(
+	        compiler.getStandardFileManager(diagnosticCollector, Locale.getDefault(), UTF_8));
+	    CompilationTask task = compiler.getTask(
+	        null, // explicitly use the default because old versions of javac log some output on stderr
+	        fileManager,
+	        diagnosticCollector,
+	        options,
+	        ImmutableSet.<String>of(),
+	        sources);
+	    task.setProcessors(processors);
+	    boolean successful = task.call();
+	    return new Result(successful, diagnosticCollector.getDiagnostics(),
+	        fileManager.getOutputFiles());
+	  }
 
   /**
    * Parse {@code sources} into {@linkplain CompilationUnitTree compilation units}.  This method
@@ -108,7 +127,7 @@ final class Compilation {
   }
 
   /** The diagnostic and file output of a compilation. */
-  static final class Result {
+  public static final class Result {
     private final boolean successful;
     private final ImmutableListMultimap<Diagnostic.Kind, Diagnostic<? extends JavaFileObject>>
         diagnosticsByKind;
@@ -145,11 +164,11 @@ final class Compilation {
       return diagnosticsByKind;
     }
 
-    ImmutableListMultimap<JavaFileObject.Kind, JavaFileObject> generatedFilesByKind() {
+    public ImmutableListMultimap<JavaFileObject.Kind, JavaFileObject> generatedFilesByKind() {
       return generatedFilesByKind;
     }
 
-    ImmutableList<JavaFileObject> generatedSources() {
+    public ImmutableList<JavaFileObject> generatedSources() {
       return generatedFilesByKind.get(SOURCE);
     }
 
